@@ -1,0 +1,1 @@
+SELECT forename, surname, last_login FROM [user] ORDER BY last_login DESC;

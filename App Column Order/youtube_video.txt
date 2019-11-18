@@ -1,0 +1,8 @@
+youtube_video.youtube_video_id,
+youtube_video.data_id,
+youtube_video.datetime_captured,
+youtube_video.datetime_created,
+youtube_video.created_by_user_id,
+youtube_video.title,
+youtube_video.description,
+youtube_video.datetime_deleted

@@ -1,0 +1,5 @@
+media_share.media_share_id,
+media_share.created_by_user_id,
+media_share.datetime_created,
+media_share.times_used,
+media_share.media_id
