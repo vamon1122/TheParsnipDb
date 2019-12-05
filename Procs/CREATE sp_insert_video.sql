@@ -1,4 +1,6 @@
-/****** Object:  StoredProcedure [dbo].[sp_insert_video]    Script Date: 28/10/2019 20:03:29 ******/
+GO
+
+/****** Object:  StoredProcedure [dbo].[sp_insert_video]    Script Date: 05/12/2019 21:35:16 ******/
 SET ANSI_NULLS ON
 GO
 

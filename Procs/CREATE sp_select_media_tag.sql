@@ -1,7 +1,6 @@
-USE [ParsnipTestDb]
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_select_media_tag]    Script Date: 01/12/2019 21:44:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_select_media_tag]    Script Date: 05/12/2019 21:37:49 ******/
 SET ANSI_NULLS ON
 GO
 

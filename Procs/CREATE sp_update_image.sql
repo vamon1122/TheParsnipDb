@@ -1,4 +1,6 @@
-/****** Object:  StoredProcedure [dbo].[sp_update_image]    Script Date: 29/10/2019 00:26:35 ******/
+GO
+
+/****** Object:  StoredProcedure [dbo].[sp_update_image]    Script Date: 05/12/2019 21:39:03 ******/
 SET ANSI_NULLS ON
 GO
 

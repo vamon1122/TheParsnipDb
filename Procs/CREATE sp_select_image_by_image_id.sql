@@ -1,6 +1,6 @@
 GO
 
-/****** Object:  StoredProcedure [dbo].[sp_select_album_images]    Script Date: 04/12/2019 21:12:10 ******/
+/****** Object:  StoredProcedure [dbo].[sp_select_image_by_image_id]    Script Date: 05/12/2019 21:37:19 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -8,13 +8,14 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
+
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 30/11/2019
 -- Description:	SELECT image
 -- =============================================
-CREATE PROCEDURE [dbo].[sp_select_album_images] 
-	@media_tag_id uniqueidentifier = NULL, 
+CREATE PROCEDURE [dbo].[sp_select_image_by_image_id] 
+	@image_id uniqueidentifier = NULL, 
 	@logged_in_user_id uniqueidentifier = NULL
 AS
 BEGIN
@@ -33,7 +34,7 @@ BEGIN
 		compressed_dir,
 		placeholder_dir,
 		vw_image.created_by_user_id,
-		image_datetime_deleted, 
+		datetime_image_deleted, 
 		media_tag_id,
 		media_share.media_share_id,
 		media_share.created_by_user_id,
@@ -46,9 +47,9 @@ BEGIN
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = vw_image.image_id
 	WHERE 
-		vw_image.user_datetime_deleted IS NULL 
-		AND vw_image.image_datetime_deleted IS NULL	
-		AND vw_image.media_tag_id = @media_tag_id	
+		vw_image.datetime_user_deleted IS NULL 
+		AND vw_image.datetime_image_deleted IS NULL	
+		AND vw_image.image_id = @image_id	
 END
 GO
 
