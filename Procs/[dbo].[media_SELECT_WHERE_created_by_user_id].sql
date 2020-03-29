@@ -1,13 +1,18 @@
-/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_created_by_user_id]    Script Date: 29/03/2020 12:49:35 ******/
+/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_created_by_user_id]    Script Date: 19/03/2020 18:40:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 30/11/2019
 -- Description:	SELECT image
+-- =============================================
+-- =============================================
+-- CHANGELOG
+-- V1.0 - 30/11/2019 - Initial create
+-- V1.1 - 18/03/2020 - Added order by datetime created
+-- V1.2 - 19/03/2020 - Removed check for user NOT being deleted
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_created_by_user_id] 
 	@created_by_user_id int, 
@@ -40,8 +45,9 @@ BEGIN
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = vw_media.id
 	WHERE 
-		vw_media.datetime_user_deleted IS NULL 
-		AND vw_media.datetime_deleted IS NULL	
+		vw_media.datetime_deleted IS NULL	
 		AND vw_media.created_by_user_id = @created_by_user_id	
+	ORDER BY
+		vw_media.datetime_created DESC
 END
 GO
