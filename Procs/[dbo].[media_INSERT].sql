@@ -1,14 +1,16 @@
-/****** Object:  StoredProcedure [dbo].[media_INSERT]    Script Date: 29/03/2020 12:49:35 ******/
+/****** Object:  StoredProcedure [dbo].[media_INSERT]    Script Date: 17/03/2020 18:38:17 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
-
 -- =============================================
 -- Author:		Name
 -- Create date: 20/02/2020
 -- Description:	Inserts media
+-- =============================================
+-- =============================================
+--CHANGELOG
+--V1.1 - 17/03/2020 - EXEC media_UPDATE upon completion
 -- =============================================
 CREATE PROCEDURE [dbo].[media_INSERT] 
 	@id char(8), 
@@ -52,13 +54,20 @@ BEGIN
 		@datetime_created, 
 		@datetime_captured, 
 		@created_by_user_id)
-	
-	IF @media_tag_id IS NOT NULL BEGIN
-		INSERT INTO 
-			media_tag_pair 
-			(media_id, media_tag_id, created_by_user_id, datetime_created)
-		VALUES
-			(@id, @media_tag_id, @created_by_user_id, @datetime_created)
-	END
+		
+	DECLARE @media_tag_created_by_user_id int = @created_by_user_id
+	EXEC media_UPDATE 
+	@id, 
+	@title, 
+	@description, 
+	@alt, 
+	@datetime_captured, 
+	@media_tag_id, 
+	@media_tag_created_by_user_id, 
+	@x_scale, 
+	@y_scale, 
+	@placeholder_dir, 
+	@compressed_dir, 
+	@original_dir
 END
 GO
