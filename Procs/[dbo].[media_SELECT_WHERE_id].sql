@@ -1,4 +1,4 @@
-/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_id]    Script Date: 29/03/2020 12:49:35 ******/
+/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_id]    Script Date: 19/03/2020 21:34:04 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -8,6 +8,10 @@ GO
 -- Author:		Ben Barton
 -- Create date: 20/02/2020
 -- Description:	SELECT image by image id
+-- =============================================
+-- CHANGELOG
+-- V1.0 - 20/02/2020 - Initial create
+-- V1.1 - 19/03/2020 - Amended field names
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_id] 
 	@id char(8), 
@@ -40,7 +44,7 @@ BEGIN
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = vw_media.id
 	WHERE 
-		vw_media.datetime_user_deleted IS NULL 
+		vw_media.created_by_user_datetime_deleted IS NULL 
 		AND vw_media.datetime_deleted IS NULL	
 		AND vw_media.id = @id	
 END

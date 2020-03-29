@@ -1,4 +1,4 @@
-/****** Object:  Table [dbo].[media_tag_pair]    Script Date: 29/03/2020 12:49:35 ******/
+/****** Object:  Table [dbo].[media_tag_pair]    Script Date: 19/03/2020 19:55:57 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7,7 +7,7 @@ CREATE TABLE [dbo].[media_tag_pair](
 	[media_id] [char](8) NOT NULL,
 	[media_tag_id] [int] NOT NULL,
 	[created_by_user_id] [int] NOT NULL,
-	[datetime_deleted] [bit] NULL,
+	[datetime_deleted] [datetime] NULL,
 	[datetime_created] [datetime] NOT NULL,
  CONSTRAINT [UQ_media_tag_pair_media_id_AND_media_tag_id] UNIQUE NONCLUSTERED 
 (
