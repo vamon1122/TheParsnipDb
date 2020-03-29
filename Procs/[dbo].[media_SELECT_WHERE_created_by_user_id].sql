@@ -1,4 +1,4 @@
-/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_created_by_user_id]    Script Date: 19/03/2020 18:40:32 ******/
+/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_created_by_user_id]    Script Date: 27/03/2020 19:37:55 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -13,6 +13,7 @@ GO
 -- V1.0 - 30/11/2019 - Initial create
 -- V1.1 - 18/03/2020 - Added order by datetime created
 -- V1.2 - 19/03/2020 - Removed check for user NOT being deleted
+-- V1.3 - 27/03/2020 - Removed [vw_video].media_tag_id (implemented multiple media tags)
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_created_by_user_id] 
 	@created_by_user_id int, 
@@ -34,7 +35,7 @@ BEGIN
 		[vw_media].compressed_dir,
 		[vw_media].placeholder_dir,
 		[vw_media].created_by_user_id,
-		[vw_media].media_tag_id,
+		NULL, --[vw_media].media_tag_id,
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_media_share_created,

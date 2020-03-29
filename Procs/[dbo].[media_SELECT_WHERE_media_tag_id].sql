@@ -1,9 +1,8 @@
-/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_media_tag_id]    Script Date: 19/03/2020 18:29:14 ******/
+/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_media_tag_id]    Script Date: 27/03/2020 20:40:31 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 30/11/2019
@@ -12,6 +11,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 30/11/2019 - Initial create
 -- V1.1 - 19/03/2020 - Added check if media tag or media tag pair has been deleted
+-- V1.2 - 27/03/2020 - Removed [vw_video].media_tag_id (implemented multiple media tags)
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_tag_id] 
 	@media_tag_id int, 
@@ -20,6 +20,59 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
+	DECLARE @media_tag_pairs TABLE 
+	(
+		[media_id] char(8)
+		,[media_tag_id] int
+		,[media_tag_pair_created_by_user_id] int
+		,[media_tag_pair_datetime_deleted] datetime
+		,[media_tag_pair_datetime_created] datetime
+		,[media_tag_pair_created_by_user_datetime_deleted] datetime
+		,[media_tag_datetime_deleted] datetime
+		,[media_tag_datetime_created] datetime
+		,[media_tag_created_by_user_datetime_deleted] datetime
+		,[media_tag_is_album] bit
+		,[media_tag_name] nchar(100) 
+		,[media_tag_description] nchar(1000)
+	) 
+	  
+	INSERT INTO @media_tag_pairs 
+	(
+		[media_id]
+		,[media_tag_id]
+		,[media_tag_pair_created_by_user_id]
+		,[media_tag_pair_datetime_deleted]
+		,[media_tag_pair_datetime_created]
+		,[media_tag_pair_created_by_user_datetime_deleted]
+		,[media_tag_datetime_deleted]
+		,[media_tag_datetime_created]
+		,[media_tag_created_by_user_datetime_deleted]
+		,[media_tag_is_album]
+		,[media_tag_name]
+		,[media_tag_description]
+	) 
+	SELECT 
+		[media_id]
+		,[media_tag_id]
+		,[media_tag_pair_created_by_user_id]
+		,[media_tag_pair_datetime_deleted]
+		,[media_tag_pair_datetime_created]
+		,[media_tag_pair_created_by_user_datetime_deleted]
+		,[media_tag_datetime_deleted]
+		,[media_tag_datetime_created]
+		,[media_tag_created_by_user_datetime_deleted]
+		,[media_tag_is_album]
+		,[media_tag_name]
+		,[media_tag_description]
+	FROM 
+		[vw_media_tag_pair] 
+	WHERE 
+		[media_tag_id] = @media_tag_id
+		AND media_tag_pair_datetime_deleted IS NULL 
+		AND media_tag_pair_created_by_user_datetime_deleted IS NULL 
+		AND media_tag_datetime_deleted IS NULL
+		AND media_tag_created_by_user_datetime_deleted IS NULL
+
 	SELECT 
 		[vw_media].id,
 		[vw_media].title,
@@ -33,7 +86,7 @@ BEGIN
 		[vw_media].compressed_dir,
 		[vw_media].placeholder_dir,
 		[vw_media].created_by_user_id,
-		[vw_media].media_tag_id,
+		NULL, --[vw_media].media_tag_id,
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_media_share_created,
@@ -44,10 +97,12 @@ BEGIN
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
 	WHERE
-		[vw_media].datetime_deleted IS NULL	 
-		AND [vw_media].media_tag_datetime_deleted IS NULL
-		AND [vw_media].media_tag_pair_datetime_deleted IS NULL
-		AND [vw_media].created_by_user_datetime_deleted IS NULL 
-		AND [vw_media].media_tag_id = @media_tag_id 
+		[vw_media].datetime_deleted IS NULL	  
+		AND [vw_media].id IN 
+			(SELECT 
+				media_id 
+			FROM 
+				@media_tag_pairs
+			)
 END
 GO

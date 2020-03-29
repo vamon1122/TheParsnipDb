@@ -1,4 +1,4 @@
-/****** Object:  StoredProcedure [dbo].[youtube_SELECT_WHERE_media_id]    Script Date: 17/03/2020 19:02:27 ******/
+/****** Object:  StoredProcedure [dbo].[youtube_SELECT_WHERE_media_id]    Script Date: 27/03/2020 21:36:13 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -9,8 +9,10 @@ GO
 -- Description:	SELECT youtube
 -- =============================================
 -- =============================================
---CHANGELOG
---V1.1 - 17/03/2020 - Added X & Y scale
+-- CHANGELOG
+-- V1.0 - 30/11/2019 - Initial create
+-- V1.1 - 17/03/2020 - Added X & Y scale
+-- V1.2 - 27/03/2020 - Removed [vw_youtube].media_tag_id & added SELECT for media_tags
 -- =============================================
 CREATE PROCEDURE [dbo].[youtube_SELECT_WHERE_media_id] 
 	@media_id char(8), 
@@ -18,7 +20,7 @@ CREATE PROCEDURE [dbo].[youtube_SELECT_WHERE_media_id]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
+
 	SELECT 
 		[vw_youtube].media_id, 
 		[vw_youtube].data_id, 
@@ -28,7 +30,7 @@ BEGIN
 		[vw_youtube].title, 
 		[vw_youtube].[description], 
 		[vw_youtube].datetime_deleted, 
-		[vw_youtube].media_tag_id, 
+		NULL, --[vw_youtube].media_tag_id, 
 		[media_share].id, 
 		[media_share].created_by_user_id, 
 		[media_share].datetime_created, 
@@ -48,5 +50,7 @@ BEGIN
 	vw_youtube.datetime_user_deleted IS NULL 
 		AND vw_youtube.datetime_deleted IS NULL	
 		AND vw_youtube.media_id = @media_id
+
+	EXEC [dbo].[media_tag_pair_SELECT_WHERE_media_id] @media_id
 END
 GO
