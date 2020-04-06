@@ -1,23 +1,51 @@
-/*2019-08-23 23:39:00.000*/
+/*2020-04-06 21:41:00.000*/
 
-DECLARE @video_id AS uniqueidentifier;
-DECLARE @directory AS char(1024);
-DECLARE @date_time_created AS datetime;
-DECLARE @date_time_media_created AS datetime;
-DECLARE @created_by_user_id AS uniqueidentifier;
-DECLARE @title AS nchar(100);
-DECLARE @media_tag_id AS uniqueidentifier;
-DECLARE @thumbnail_directory AS char(1024);
+DECLARE @videoTitle nchar(100) = N''
+DECLARE @fileName varchar(1000) = ''
+DECLARE @thumbnailOriginalExt varchar(10) = '.png'
+DECLARE @videoOriginalExt varchar(10) = '.MOV'
+DECLARE @videoCompressedExt varchar(10) = '.mp4'
+DECLARE @dateTimeCaptured datetime = CONVERT(datetime, '2017-12-27T22:49:07')
+DECLARE @media_x_scale int = 16
+DECLARE @media_y_scale int = 9
 
+DECLARE @mediaTagId int = 4
+DECLARE @createdByUserId int = 1
+DECLARE @newMediaId char(8) = (SELECT LEFT(NEWID(), 8))
+DECLARE @now datetime = GETDATE()
+DECLARE @vlcExt char(5) = '00001'
+DECLARE @thumbnailOriginalDir varchar(1000) = CONCAT('Resources/Media/Videos/Thumbnails/Originals/', @fileName, @videoOriginalExt, @vlcExt, @thumbnailOriginalExt)
+DECLARE @thumbnailCompressedDir varchar(1000) = CONCAT('Resources/Media/Videos/Thumbnails/Compressed/', @fileName, @videoOriginalExt, @vlcExt, '.jpg')
+DECLARE @thumbnailPlaceholderDir varchar(1000) = CONCAT('Resources/Media/Videos/Thumbnails/Placeholders/', @fileName, @videoOriginalExt, @vlcExt, '.jpg')
+DECLARE @videoCompressedDir varchar(1000) = CONCAT('Resources/Media/Videos/Compressed/', @fileName, @videoCompressedExt)
+DECLARE @videoOriginalDir varchar(1000) = NULL --CONCAT('Resources/Media/Videos/Compressed', @fileName, @videoOriginalExt)
+EXEC media_INSERT
+@id = @newMediaId, 
+@type = 'video',
+@datetime_captured = @dateTimeCaptured,
+@datetime_created = @now,
+@x_scale = @media_x_scale,
+@y_scale = @media_y_scale,
+@original_dir = @thumbnailOriginalDir,
+@compressed_dir = @thumbnailCompressedDir,
+@placeholder_dir = @thumbnailPlaceholderDir,
+@created_by_user_id = @createdByUserId,
+@media_tag_id = @mediaTagId,
+@title = @videoTitle,
+@description = NULL,
+@alt = NULL
+EXEC media_UPDATE
+@id = @newMediaId,
+@title = @videoTitle,
+@datetime_captured = @dateTimeCaptured,
+@media_tag_id = @mediaTagId,
+@media_tag_created_by_user_id = @createdByUserId,
+@placeholder_dir = @thumbnailPlaceholderDir,
+@compressed_dir = @thumbnailCompressedDir,
+@original_dir = @thumbnailOriginalDir
 
-SET @video_id = NEWID();
-SET @directory = 'Resources/Media/Videos/Local/Ben''s BBQ Video!!!.mp4'
-SET @date_time_created = '2019-08-23 23:37:00.000';
-SET @date_time_media_created = '2019-08-23 23:37:00.000';
-SET @created_by_user_id = '37b894df-1311-402b-b451-97d3ab73b294'; /*Admin user*/
-SET @title = 'Ben''s BBQ Video!!!';
-SET @media_tag_id = 'ff3127df-70b2-47ef-b77b-2e086d2ef370'; /*Krakow*/
-SET @thumbnail_directory = 'Resources/Media/Images/Video_Thumbnails/Ben''s BBQ Video!!!.png'
-
-INSERT INTO video (video_id, directory, thumbnail_directory, date_time_media_created, date_time_created, created_by_user_id, title) VALUES (@video_id, @directory, @thumbnail_directory, @date_time_media_created, @date_time_created, @created_by_user_id, @title);
-INSERT INTO media_tag_pair VALUES(@video_id, @media_tag_id);
+INSERT INTO [dbo].[video] ([media_id]
+           ,[x_scale]
+           ,[y_scale]
+           ,[compressed_dir]
+           ,[original_dir]) VALUES (@newMediaId, @media_x_scale, @media_y_scale, @videoCompressedDir, @videoOriginalDir)
