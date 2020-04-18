@@ -5,9 +5,9 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[video](
 	[media_id] [char](8) NOT NULL,
-	[x_scale] [float] NULL,
-	[y_scale] [float] NULL,
-	[compressed_dir] [char](1024) NOT NULL,
+	[x_scale] [float] NOT NULL,
+	[y_scale] [float] NOT NULL,
+	[compressed_dir] [char](1024) NULL,
 	[original_dir] [char](1024) NULL,
  CONSTRAINT [PK_video_media_id] PRIMARY KEY CLUSTERED 
 (
