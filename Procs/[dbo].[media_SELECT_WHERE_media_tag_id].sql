@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[media_SELECT_WHERE_media_tag_id]    Script Date: 27/03/2020 20:40:31 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -12,6 +11,7 @@ GO
 -- V1.0 - 30/11/2019 - Initial create
 -- V1.1 - 19/03/2020 - Added check if media tag or media tag pair has been deleted
 -- V1.2 - 27/03/2020 - Removed [vw_video].media_tag_id (implemented multiple media tags)
+-- V1.3 - 05/05/2020 - Removed is_album (removed from table)
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_tag_id] 
 	@media_tag_id int, 
@@ -31,7 +31,6 @@ BEGIN
 		,[media_tag_datetime_deleted] datetime
 		,[media_tag_datetime_created] datetime
 		,[media_tag_created_by_user_datetime_deleted] datetime
-		,[media_tag_is_album] bit
 		,[media_tag_name] nchar(100) 
 		,[media_tag_description] nchar(1000)
 	) 
@@ -47,7 +46,6 @@ BEGIN
 		,[media_tag_datetime_deleted]
 		,[media_tag_datetime_created]
 		,[media_tag_created_by_user_datetime_deleted]
-		,[media_tag_is_album]
 		,[media_tag_name]
 		,[media_tag_description]
 	) 
@@ -61,7 +59,6 @@ BEGIN
 		,[media_tag_datetime_deleted]
 		,[media_tag_datetime_created]
 		,[media_tag_created_by_user_datetime_deleted]
-		,[media_tag_is_album]
 		,[media_tag_name]
 		,[media_tag_description]
 	FROM 

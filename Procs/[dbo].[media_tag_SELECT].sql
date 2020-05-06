@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[media_tag_SELECT]    Script Date: 29/03/2020 12:49:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -8,6 +7,10 @@ GO
 -- Author:		Ben Barton
 -- Create date: 14/02/2020
 -- Description:	SELECT all media_tags
+-- =============================================
+-- =============================================
+-- CHANGELOG
+-- V1.0 - 14/02/2020 - Initial create 
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_tag_SELECT] 

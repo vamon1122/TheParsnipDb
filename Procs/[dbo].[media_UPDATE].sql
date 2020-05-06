@@ -10,8 +10,9 @@ GO
 -- =============================================
 -- =============================================
 -- CHANGELOG
--- V1.0 - 20/02/20 - Initial Create
--- V1.1 - 28/03/20 - Removed DELETE of existing media_tag_pair
+-- V1.0 - 20/02/2020 - Initial Create
+-- V1.1 - 28/03/2020 - Removed DELETE of existing media_tag_pair
+-- V1.2 - 06/05/2020 - Added proc for media tag inserts
 -- =============================================
 CREATE PROCEDURE [dbo].[media_UPDATE] 
 	@id char(8), 
@@ -32,12 +33,7 @@ BEGIN
 
 	IF @media_tag_id IS NOT NULL AND @media_tag_created_by_user_id IS NOT NULL
 	BEGIN
-	
-		IF (SELECT TOP(1) media_tag_id FROM media_tag_pair WHERE media_id = @id AND media_tag_id = @media_tag_id) IS NOT NULL BEGIN
-			UPDATE media_tag_pair SET datetime_deleted = NULL WHERE media_id = @id AND media_tag_id = @media_tag_id;
-		END ELSE BEGIN
-			INSERT INTO media_tag_pair (media_id, media_tag_id, created_by_user_id) VALUES (@id, @media_tag_id, @media_tag_created_by_user_id);
-		END
+		EXEC media_tag_pair_INSERT @id, @media_tag_id, @media_tag_created_by_user_id
 	END
 
 	UPDATE 
