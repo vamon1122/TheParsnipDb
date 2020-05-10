@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[video_SELECT_WHERE_media_id]    Script Date: 27/03/2020 21:36:18 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -12,6 +11,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 30/11/2019 - Initial create
 -- V1.1 - 27/03/2020 - Removed [vw_video].media_tag_id & added SELECT for media_tags
+-- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
 -- =============================================
 CREATE PROCEDURE [dbo].[video_SELECT_WHERE_media_id] 
 	@media_id char(8), 
@@ -54,5 +54,7 @@ BEGIN
 		AND [vw_video].media_id = @media_id
 
 	EXEC [dbo].[media_tag_pair_SELECT_WHERE_media_id] @media_id
+
+	EXEC [dbo].[media_user_pair_SELECT_WHERE_media_id] @media_id
 END
 GO

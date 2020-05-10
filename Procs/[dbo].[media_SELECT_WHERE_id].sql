@@ -12,6 +12,7 @@ GO
 -- V1.0 - 20/02/2020 - Initial create
 -- V1.1 - 19/03/2020 - Amended field names
 -- V1.2 - 27/03/2020 - Added SELECT for media_tags
+-- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_id] 
 	@id char(8), 
@@ -49,5 +50,7 @@ BEGIN
 		AND vw_media.id = @id
 		
 	EXEC [dbo].[media_tag_pair_SELECT_WHERE_media_id] @media_id = @id
+
+	EXEC [dbo].[media_user_pair_SELECT_WHERE_media_id] @media_id = @id
 END
 GO
