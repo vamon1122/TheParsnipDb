@@ -12,6 +12,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 14/02/2020 - Initial create 
 -- V1.1 - 11/05/2020 - Added check if tag has been deleted
+-- V1.2 - 28/05/2020 - Added ORDER BY [name]
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_tag_SELECT] 
@@ -31,5 +32,7 @@ BEGIN
 	WHERE 
 		[user].datetime_deleted IS NULL
 		AND media_tag.datetime_deleted IS NULL
+	ORDER BY
+		[name]
 END
 GO
