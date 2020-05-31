@@ -12,6 +12,7 @@ GO
 -- V1.0 - 10/04/2020 - Initial create
 -- V1.1 - 30/04/2020 - Removed hard-coded directories
 -- V1.2 - 30/04/2020 - Added videoOriginalDir parameter
+-- V1.3 - 30/05/2020 - Changed defauly media tag from 4 (Amsterdam) to NULL
 -- =============================================
 CREATE PROCEDURE [dbo].[video_INSERT] 
 	@videoTitle nchar(100) = '',
@@ -23,7 +24,7 @@ CREATE PROCEDURE [dbo].[video_INSERT]
 	@dateTimeCaptured datetime = GETDATE,
 	@media_x_scale int = 16,
 	@media_y_scale int = 9,
-	@mediaTagId int = 4,
+	@mediaTagId int = NULL,
 	@createdByUserId int = 1,
 	@newMediaId char(8) = NULL,
 	@now datetime = GETDATE

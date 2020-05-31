@@ -13,6 +13,7 @@ GO
 -- V1.0 - 20/02/2020 - Initial Create
 -- V1.1 - 28/03/2020 - Removed DELETE of existing media_tag_pair
 -- V1.2 - 06/05/2020 - Added proc for media tag inserts
+-- V1.3 - 29/05/2020 - Corrected media tag logic
 -- =============================================
 CREATE PROCEDURE [dbo].[media_UPDATE] 
 	@id char(8), 

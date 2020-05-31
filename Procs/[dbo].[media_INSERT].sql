@@ -9,8 +9,10 @@ GO
 -- Description:	Inserts media
 -- =============================================
 -- =============================================
---CHANGELOG
---V1.1 - 17/03/2020 - EXEC media_UPDATE upon completion
+-- CHANGELOG
+-- V1.0 - 20/02/2020 - Initial create
+-- V1.1 - 17/03/2020 - EXEC media_UPDATE upon completion
+-- V1.2 - 29/05/2020 - Added default value for
 -- =============================================
 CREATE PROCEDURE [dbo].[media_INSERT] 
 	@id char(8), 
@@ -23,7 +25,7 @@ CREATE PROCEDURE [dbo].[media_INSERT]
 	@compressed_dir char(1024),
 	@placeholder_dir char(1024), 
 	@created_by_user_id int,
-	@media_tag_id char(8),
+	@media_tag_id char(8) = NULL,
 	@title nchar(100) = NULL,
 	@description nchar(1000) = NULL,
 	@alt nchar(1024) = NULL
@@ -55,7 +57,13 @@ BEGIN
 		@datetime_captured, 
 		@created_by_user_id)
 		
-	DECLARE @media_tag_created_by_user_id int = @created_by_user_id
+	DECLARE @media_tag_created_by_user_id int
+	IF @media_tag_id IS NOT NULL BEGIN
+		SET @media_tag_created_by_user_id = @created_by_user_id
+	END ELSE BEGIN
+		SET @media_tag_created_by_user_id = NULL
+	END
+
 	EXEC media_UPDATE 
 	@id, 
 	@title, 
