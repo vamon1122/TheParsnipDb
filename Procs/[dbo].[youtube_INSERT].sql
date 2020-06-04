@@ -1,4 +1,3 @@
-/****** Object:  StoredProcedure [dbo].[youtube_INSERT]    Script Date: 29/03/2020 12:49:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -9,6 +8,12 @@ GO
 -- Create date: 28/02/2020
 -- Description:	Inserts youtube video
 -- =============================================
+-- =============================================
+-- CHANGELOG
+-- 28/02/2020 - Initial create
+-- 03/06/2020 - media_tag_id is now an optional parameter
+-- =============================================
+
 CREATE PROCEDURE [dbo].[youtube_INSERT] 
 	@media_id char(8), 
 	@data_id char(11), 
@@ -21,7 +26,7 @@ CREATE PROCEDURE [dbo].[youtube_INSERT]
 	@compressed_dir char(1024),
 	@placeholder_dir char(1024), 
 	@created_by_user_id int,
-	@media_tag_id char(8),
+	@media_tag_id char(8) = NULL,
 	@title nchar(100) = NULL,
 	@description nchar(1000) = NULL,
 	@alt nchar(1024) = NULL
