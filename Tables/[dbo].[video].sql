@@ -1,4 +1,3 @@
-/****** Object:  Table [dbo].[video]    Script Date: 29/03/2020 12:49:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -8,7 +7,7 @@ CREATE TABLE [dbo].[video](
 	[x_scale] [float] NOT NULL,
 	[y_scale] [float] NOT NULL,
 	[compressed_dir] [char](1024) NULL,
-	[original_dir] [char](1024) NULL,
+	[original_dir] [char](1024) NOT NULL,
  CONSTRAINT [PK_video_media_id] PRIMARY KEY CLUSTERED 
 (
 	[media_id] ASC
