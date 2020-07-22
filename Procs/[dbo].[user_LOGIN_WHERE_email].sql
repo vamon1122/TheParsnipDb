@@ -1,46 +1,59 @@
-/****** Object:  StoredProcedure [dbo].[user_LOGIN_WHERE_email]    Script Date: 29/03/2020 12:49:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 -- =============================================
 -- Author:		Ben Barton
--- Create date: 
--- Description:	
+-- Create date: 29/03/2020
+-- Description:	Selects user with corresponding email and password combination & updates datetime_last_login
+-- =============================================
+-- =============================================
+-- CHANGELOG
+-- 29/03/2020 - Initial create
+-- 22/07/2020 added parameter & UPDATE for datetime_last_login
 -- =============================================
 CREATE PROCEDURE [dbo].[user_LOGIN_WHERE_email] 
 	@email varchar(254), 
-	@password nchar(50)
+	@password nchar(50),
+	@datetime_now datetime = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
-	SELECT TOP 1 
-		id,
-		username,
-		email,
-		[password],
-		forename,
-		surname,
-		dob,
-		gender,
-		address_1,
-		address_2,
-		address_3,
-		post_code,
-		mobile_phone,
-		home_phone,
-		work_phone,
-		datetime_created,
-		datetime_last_login,
-		[type],
-		[status],
-		profile_image_media_id,
-		datetime_deleted 
-	FROM 
-		[user] 
+
+	IF @datetime_now IS NULL 
+	BEGIN
+		SET @datetime_now = GETDATE()
+	END
+
+	UPDATE 
+		[user]
+	SET
+		datetime_last_login = @datetime_now 
+	OUTPUT
+		INSERTED.id,
+		INSERTED.username,
+		INSERTED.email,
+		INSERTED.[password],
+		INSERTED.forename,
+		INSERTED.surname,
+		INSERTED.dob,
+		INSERTED.gender,
+		INSERTED.address_1,
+		INSERTED.address_2,
+		INSERTED.address_3,
+		INSERTED.post_code,
+		INSERTED.mobile_phone,
+		INSERTED.home_phone,
+		INSERTED.work_phone,
+		INSERTED.datetime_created,
+		INSERTED.datetime_last_login,
+		INSERTED.[type],
+		INSERTED.[status],
+		INSERTED.profile_image_media_id,
+		INSERTED.datetime_deleted 
 	WHERE 
 		datetime_deleted IS NULL 
 		AND email = @email 
-		AND password = @password
+		AND [password] = @password
 END
 GO
