@@ -12,6 +12,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 23/08/2020 - Initial create
+-- V1.1 - 23/08/2020 - Return results for new parent media & stop filtering by media_id (not a parameter)
 -- =============================================
 
 CREATE PROCEDURE dbo.video_sequence_SELECT_WHERE_unstitched
@@ -63,11 +64,31 @@ BEGIN
 		video_sequence
 		INNER JOIN vw_video ON vw_video.media_id = video_sequence.media_id
 	WHERE
-		video_sequence.media_id = @media_id
-		AND vw_video.compressed_dir IS NULL
+		vw_video.compressed_dir IS NULL
 	ORDER BY 
 		vw_video.datetime_created ASC
-		
+	
+	SELECT 
+		@media_id,
+		@title,
+		@description,
+		@alt,
+		@datetime_captured,
+		@datetime_created,
+		@x_scale,
+		@y_scale,
+		@original_dir,
+		@compressed_dir,
+		@thumbnail_x_scale,
+		@thumbnail_y_scale,
+		@thumbnail_original_dir,
+		@thumbnail_compressed_dir,
+		@thumbnail_placeholder_dir,
+		@created_by_user_id,
+		@datetime_deleted,
+		@datetime_user_deleted,
+		@position
+	
 	EXEC dbo.video_sequence_original_media_SELECT_WHERE_media_id
 		@media_id
 END
