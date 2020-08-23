@@ -12,9 +12,10 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 23/08/2020 - Initial create
+-- V1.1 - 23/08/2020 - Added missing 'dbo' modifier class to dbo.UDT_sequenced_video
 -- =============================================
 
-CREATE TYPE UDT_sequenced_video AS TABLE
+CREATE TYPE dbo.UDT_sequenced_video AS TABLE
 (
 	original_media_id char(8) PRIMARY KEY,
 	position int NOT NULL
