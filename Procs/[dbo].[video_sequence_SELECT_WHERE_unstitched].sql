@@ -13,6 +13,8 @@ GO
 -- CHANGELOG
 -- V1.0 - 23/08/2020 - Initial create
 -- V1.1 - 23/08/2020 - Return results for new parent media & stop filtering by media_id (not a parameter)
+-- V1.2 - 23/08/2020 - Fix results
+-- V1.3 - 29/08/2020 - Changed scales to smallint
 -- =============================================
 
 CREATE PROCEDURE dbo.video_sequence_SELECT_WHERE_unstitched
@@ -26,19 +28,18 @@ BEGIN
 	DECLARE @alt char(1024)
 	DECLARE @datetime_captured datetime
 	DECLARE @datetime_created datetime
-	DECLARE @x_scale float
-	DECLARE @y_scale float
+	DECLARE @x_scale smallint
+	DECLARE @y_scale smallint
 	DECLARE @original_dir char(1024)
 	DECLARE @compressed_dir char(1024)
-	DECLARE @thumbnail_x_scale int
-	DECLARE @thumbnail_y_scale int
+	DECLARE @thumbnail_x_scale smallint
+	DECLARE @thumbnail_y_scale smallint
 	DECLARE @thumbnail_original_dir char(1024)
 	DECLARE @thumbnail_compressed_dir char(1024)
 	DECLARE @thumbnail_placeholder_dir char(1024)
 	DECLARE @created_by_user_id int
 	DECLARE @datetime_deleted datetime
 	DECLARE @datetime_user_deleted datetime
-	DECLARE @position int
 	
 	SELECT TOP 1
 		@media_id = vw_video.media_id,
@@ -58,8 +59,7 @@ BEGIN
 		@thumbnail_placeholder_dir = vw_video.thumbnail_placeholder_dir,
 		@created_by_user_id = vw_video.created_by_user_id,
 		@datetime_deleted = vw_video.datetime_deleted,
-		@datetime_user_deleted = vw_video.datetime_user_deleted,
-		@position = video_sequence.position
+		@datetime_user_deleted = vw_video.datetime_user_deleted
 	FROM
 		video_sequence
 		INNER JOIN vw_video ON vw_video.media_id = video_sequence.media_id
@@ -68,27 +68,28 @@ BEGIN
 	ORDER BY 
 		vw_video.datetime_created ASC
 	
-	SELECT 
-		@media_id,
-		@title,
-		@description,
-		@alt,
-		@datetime_captured,
-		@datetime_created,
-		@x_scale,
-		@y_scale,
-		@original_dir,
-		@compressed_dir,
-		@thumbnail_x_scale,
-		@thumbnail_y_scale,
-		@thumbnail_original_dir,
-		@thumbnail_compressed_dir,
-		@thumbnail_placeholder_dir,
-		@created_by_user_id,
-		@datetime_deleted,
-		@datetime_user_deleted,
-		@position
-	
-	EXEC dbo.video_sequence_original_media_SELECT_WHERE_media_id
-		@media_id
+	IF @@ROWCOUNT > 0 BEGIN
+		SELECT 
+			@media_id,
+			@title,
+			@description,
+			@alt,
+			@datetime_captured,
+			@datetime_created,
+			@x_scale,
+			@y_scale,
+			@original_dir,
+			@compressed_dir,
+			@thumbnail_x_scale,
+			@thumbnail_y_scale,
+			@thumbnail_original_dir,
+			@thumbnail_compressed_dir,
+			@thumbnail_placeholder_dir,
+			@created_by_user_id,
+			@datetime_deleted,
+			@datetime_user_deleted
+		
+		EXEC dbo.video_sequence_original_media_SELECT_WHERE_media_id
+			@media_id
+	END
 END

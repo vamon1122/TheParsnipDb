@@ -13,6 +13,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 23/08/2020 - Initial create
 -- V1.1 - 23/08/2020 - Added missing 'dbo' modifier class to dbo.UDT_sequenced_video
+-- V1.2 - 29/08/2020 - Changed scales to smallint
 -- =============================================
 
 CREATE TYPE dbo.UDT_sequenced_video AS TABLE
@@ -31,8 +32,8 @@ CREATE PROCEDURE dbo.video_sequence_INSERT
 	@thumbnail_compressed_dir varchar(1000),
 	@thumbnail_placeholder_dir varchar(1000),
 	@datetime_captured datetime = NULL,
-	@media_x_scale float,
-	@media_y_scale float,
+	@media_x_scale smallint,
+	@media_y_scale smallint,
 	@media_tag_id int = NULL,
 	@created_by_user_id int = NULL,
 	@datetime_now datetime = NULL,

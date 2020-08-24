@@ -7,10 +7,11 @@ GO
 CREATE TABLE dbo.video
 (
 	media_id char(8) NOT NULL,
-	x_scale float NOT NULL,
-	y_scale float NOT NULL,
+	x_scale smallint NULL,
+	y_scale smallint NULL,
 	compressed_dir char(1024) NULL,
 	original_dir char(1024) NULL,
+	duration int NULL
 	CONSTRAINT PK_video_media_id PRIMARY KEY CLUSTERED
 	(
 		media_id ASC

@@ -12,6 +12,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 23/08/2020 - Initial create
+-- V1.1 - 23/08/2020 - Get data from vw_video rather than vw_media
 -- =============================================
 
 CREATE PROCEDURE dbo.video_sequence_original_media_SELECT_WHERE_media_id
@@ -22,30 +23,36 @@ BEGIN
 	SET NOCOUNT ON
 
 	SELECT
-		vw_media.id,
-		vw_media.title,
-		vw_media.description,
-		vw_media.alt,
-		vw_media.datetime_captured,
-		vw_media.datetime_created,
-		vw_media.x_scale,
-		vw_media.y_scale,
-		vw_media.original_dir,
-		vw_media.compressed_dir,
-		vw_media.placeholder_dir,
-		vw_media.created_by_user_id,
-		NULL, --vw_media.media_tag_id,
+		vw_video.media_id,
+		vw_video.title,
+		vw_video.[description],
+		vw_video.alt,
+		vw_video.datetime_captured,
+		vw_video.datetime_created,
+		vw_video.x_scale,
+		vw_video.y_scale,
+		vw_video.original_dir,
+		vw_video.compressed_dir,
+		vw_video.thumbnail_x_scale,
+		vw_video.thumbnail_y_scale,
+		vw_video.thumbnail_original_dir,
+		vw_video.thumbnail_compressed_dir,
+		vw_video.thumbnail_placeholder_dir,
+		vw_video.created_by_user_id,
+		vw_video.datetime_deleted,
+		vw_video.datetime_user_deleted,
+		NULL, --vw_video.media_tag_id,
 		media_share.id,
 		media_share.created_by_user_id,
 		media_share.datetime_created AS datetime_media_share_created,
-		vw_media.type,
+		vw_video.type,
 		video_sequence.position
 	FROM
 		video_sequence
-		INNER JOIN vw_media ON vw_media.id = video_sequence.original_media_id
+		INNER JOIN vw_video ON vw_video.media_id = video_sequence.original_media_id
 		LEFT JOIN media_share
 			ON media_share.created_by_user_id = @logged_in_user_id
-			AND media_share.media_id = vw_media.id
+			AND media_share.media_id = vw_video.media_id
 	WHERE
 		video_sequence.media_id = @media_id
 END

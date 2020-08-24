@@ -1,8 +1,9 @@
-/****** Object:  StoredProcedure [dbo].[media_INSERT]    Script Date: 17/03/2020 18:38:17 ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- =============================================
 -- Author:		Name
 -- Create date: 20/02/2020
@@ -13,14 +14,16 @@ GO
 -- V1.0 - 20/02/2020 - Initial create
 -- V1.1 - 17/03/2020 - EXEC media_UPDATE upon completion
 -- V1.2 - 29/05/2020 - Added default value for
+-- V1.3 - 29/08/2020 - Changed scales to smallint
 -- =============================================
+
 CREATE PROCEDURE [dbo].[media_INSERT] 
 	@id char(8), 
 	@type char(10), 
 	@datetime_captured datetime = GETDATE,
 	@datetime_created datetime = GETDATE,
-	@x_scale float,
-	@y_scale float,
+	@x_scale smallint,
+	@y_scale smallint,
 	@original_dir char(1024),
 	@compressed_dir char(1024),
 	@placeholder_dir char(1024), 
@@ -31,7 +34,7 @@ CREATE PROCEDURE [dbo].[media_INSERT]
 	@alt nchar(1024) = NULL
 AS
 BEGIN
-	SET NOCOUNT ON;
+	SET NOCOUNT ON
 
 	INSERT INTO 
 		media 

@@ -1,5 +1,6 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -10,8 +11,9 @@ GO
 -- =============================================
 -- =============================================
 -- CHANGELOG
--- 28/02/2020 - Initial create
--- 03/06/2020 - media_tag_id is now an optional parameter
+-- V1.0 - 28/02/2020 - Initial create
+-- V1.1 - 03/06/2020 - media_tag_id is now an optional parameter
+-- V1.3 - 29/08/2020 - Changed scales to smallint
 -- =============================================
 
 CREATE PROCEDURE [dbo].[youtube_INSERT] 
@@ -20,8 +22,8 @@ CREATE PROCEDURE [dbo].[youtube_INSERT]
 	@type char(10), 
 	@datetime_captured datetime = GETDATE,
 	@datetime_created datetime = GETDATE,
-	@x_scale float,
-	@y_scale float,
+	@x_scale smallint,
+	@y_scale smallint,
 	@original_dir char(1024),
 	@compressed_dir char(1024),
 	@placeholder_dir char(1024), 
@@ -32,22 +34,23 @@ CREATE PROCEDURE [dbo].[youtube_INSERT]
 	@alt nchar(1024) = NULL
 AS
 BEGIN
-	SET NOCOUNT ON;
+	SET NOCOUNT ON
+	
 	EXEC media_INSERT
-	@media_id,
-	@type,
-	@datetime_captured,
-	@datetime_created,
-	@x_scale,
-	@y_scale,
-	@original_dir,
-	@compressed_dir,
-	@placeholder_dir, 
-	@created_by_user_id,
-	@media_tag_id,
-	@title,
-	@description,
-	@alt
+		@media_id,
+		@type,
+		@datetime_captured,
+		@datetime_created,
+		@x_scale,
+		@y_scale,
+		@original_dir,
+		@compressed_dir,
+		@placeholder_dir, 
+		@created_by_user_id,
+		@media_tag_id,
+		@title,
+		@description,
+		@alt
 
 	INSERT INTO 
 		youtube 
