@@ -1,7 +1,9 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 30/11/2019
@@ -12,7 +14,9 @@ GO
 -- V1.1 - 19/03/2020 - Added check if media tag or media tag pair has been deleted
 -- V1.2 - 27/03/2020 - Removed [vw_video].media_tag_id (implemented multiple media tags)
 -- V1.3 - 05/05/2020 - Removed is_album (removed from table)
+-- V1.4 - 11/10/2020 - Added media status
 -- =============================================
+
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_tag_id] 
 	@media_tag_id int, 
 	@logged_in_user_id int = NULL
@@ -87,7 +91,8 @@ BEGIN
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_media_share_created,
-		[vw_media].[type]
+		[vw_media].[type],
+		[vw_media].[status]
 	FROM
 		[vw_media]
 		LEFT JOIN media_share 
@@ -95,6 +100,7 @@ BEGIN
 			AND media_share.media_id = [vw_media].id
 	WHERE
 		[vw_media].datetime_deleted IS NULL	  
+		AND [vw_media].[status] = 'complete'
 		AND [vw_media].id IN 
 			(SELECT 
 				media_id 

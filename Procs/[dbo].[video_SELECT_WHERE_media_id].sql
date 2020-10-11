@@ -1,7 +1,9 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 30/11/2019
@@ -11,8 +13,10 @@ GO
 -- CHANGELOG
 -- V1.0 - 30/11/2019 - Initial create
 -- V1.1 - 27/03/2020 - Removed [vw_video].media_tag_id & added SELECT for media_tags
--- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
+-- V1.2 - 10/05/2020 - Added SELECT for media_user_pairs
+-- V1.3 - 11/10/2020 - Added media status
 -- =============================================
+
 CREATE PROCEDURE [dbo].[video_SELECT_WHERE_media_id] 
 	@media_id char(8), 
 	@logged_in_user_id int = NULL
@@ -42,7 +46,8 @@ BEGIN
 		[vw_video].datetime_user_deleted, 
 		[media_share].id,
 		[media_share].created_by_user_id,
-		[media_share].datetime_created AS datetime_vw_media_share_created
+		[media_share].datetime_created AS datetime_vw_media_share_created,
+		[vw_video].[status]
 	FROM 
 		vw_video 
 		LEFT JOIN [media_share] 

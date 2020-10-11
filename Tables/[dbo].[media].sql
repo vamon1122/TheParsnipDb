@@ -8,6 +8,7 @@ CREATE TABLE dbo.media
 (
 	id char(8) NOT NULL,
 	[type] char(10) NULL,
+	[status] char(10) NULL,
 	created_by_user_id int NULL,
 	datetime_deleted datetime NULL,
 	datetime_created datetime NOT NULL,
@@ -31,6 +32,9 @@ CREATE TABLE dbo.media
 	ON [PRIMARY]
 ) 
 ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[media] ADD  CONSTRAINT [DF_media_status]  DEFAULT ('raw') FOR [status]
 GO
 
 ALTER TABLE dbo.media
@@ -57,6 +61,13 @@ GO
 
 ALTER TABLE dbo.media
 CHECK CONSTRAINT FK_media_created_by_user
+GO
+
+ALTER TABLE [dbo].[media]  WITH CHECK ADD  CONSTRAINT [FK_media_media_status] FOREIGN KEY([status])
+REFERENCES [dbo].[media_status] ([status])
+GO
+
+ALTER TABLE [dbo].[media] CHECK CONSTRAINT [FK_media_media_status]
 GO
 
 ALTER TABLE dbo.media  WITH CHECK

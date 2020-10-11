@@ -16,6 +16,7 @@ GO
 -- V1.2 - 06/05/2020 - Added proc for media tag inserts
 -- V1.3 - 29/05/2020 - Corrected media tag logic
 -- V1.4 - 29/08/2020 - Changed scales to smallint
+-- V1.5 - 10/10/2020 - Added status
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_UPDATE] 
@@ -30,7 +31,8 @@ CREATE PROCEDURE [dbo].[media_UPDATE]
 	@y_scale smallint = NULL,
 	@placeholder_dir char(1024) = NULL,
 	@compressed_dir char(1024) = NULL,
-	@original_dir char(1024) = NULL
+	@original_dir char(1024) = NULL,
+	@status char(10) = NULL
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -44,14 +46,15 @@ BEGIN
 		media 
 	SET 
 		title = @title, 
-		description = @description, 
+		[description] = @description, 
 		alt = @alt, 
 		datetime_captured = COALESCE(@datetime_captured, datetime_captured),
 		x_scale = COALESCE(@x_scale, x_scale),
 		y_scale = COALESCE(@y_scale, y_scale),
 		placeholder_dir = COALESCE(@placeholder_dir, placeholder_dir),
 		compressed_dir = COALESCE(@compressed_dir, compressed_dir),
-		original_dir = COALESCE(@original_dir, original_dir)
+		original_dir = COALESCE(@original_dir, original_dir),
+		[status] = @status
 	WHERE 
 		id = @id;
 END

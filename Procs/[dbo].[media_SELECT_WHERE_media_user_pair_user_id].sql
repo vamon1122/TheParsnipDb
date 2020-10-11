@@ -1,7 +1,9 @@
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
+
 -- =============================================
 -- Author:		Ben Barton
 -- Create date: 10/05/2020
@@ -9,7 +11,9 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 10/05/2020 - Initial create
+-- V1.1 - 11/10/2020 - Added media status
 -- =============================================
+
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_user_pair_user_id] 
 	@user_id int, 
 	@logged_in_user_id int = NULL
@@ -53,14 +57,16 @@ BEGIN
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_media_share_created,
-		[vw_media].[type]
+		[vw_media].[type],
+		[vw_media].[status]
 	FROM
 		[vw_media]
 		LEFT JOIN media_share 
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
 	WHERE
-		[vw_media].datetime_deleted IS NULL	  
+		[vw_media].datetime_deleted IS NULL
+		AND [vw_media].[status] = 'complete'
 		AND [vw_media].id IN 
 			(SELECT 
 				media_id 
