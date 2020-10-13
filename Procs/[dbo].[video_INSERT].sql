@@ -63,7 +63,8 @@ BEGIN
 		@media_tag_id = @media_tag_id,
 		@title = @title,
 		@description = NULL,
-		@alt = NULL
+		@alt = NULL,
+		@status = 'raw'
 
 	INSERT INTO dbo.video 
 	(

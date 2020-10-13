@@ -17,6 +17,7 @@ GO
 -- V1.3 - 29/05/2020 - Corrected media tag logic
 -- V1.4 - 29/08/2020 - Changed scales to smallint
 -- V1.5 - 10/10/2020 - Added status
+-- V1.6 - 13/10/2020 - Added coalesce for status
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_UPDATE] 
@@ -53,8 +54,7 @@ BEGIN
 		y_scale = COALESCE(@y_scale, y_scale),
 		placeholder_dir = COALESCE(@placeholder_dir, placeholder_dir),
 		compressed_dir = COALESCE(@compressed_dir, compressed_dir),
-		original_dir = COALESCE(@original_dir, original_dir),
-		[status] = @status
+		[status] = COALESCE(@status, status)
 	WHERE 
 		id = @id;
 END

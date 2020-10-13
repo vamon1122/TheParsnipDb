@@ -15,6 +15,7 @@ GO
 -- V1.1 - 22/08/2020 - Added check for NULL original_dir
 -- V1.2 - 23/08/2020 - Added TOP 1
 -- V1.3 - 11/10/2020 - Added check for media status error
+-- V1.4 - 13/10/2020 - Return media status
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -40,7 +41,12 @@ BEGIN
 		thumbnail_placeholder_dir,
 		created_by_user_id,
 		datetime_deleted,
-		datetime_user_deleted
+		datetime_user_deleted,
+		null,
+		null,
+		null,
+		null,
+		[status]
 	FROM
 		vw_video
 	WHERE
