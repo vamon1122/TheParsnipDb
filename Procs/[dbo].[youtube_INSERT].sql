@@ -14,6 +14,7 @@ GO
 -- V1.0 - 28/02/2020 - Initial create
 -- V1.1 - 03/06/2020 - media_tag_id is now an optional parameter
 -- V1.3 - 29/08/2020 - Changed scales to smallint
+-- V1.4 - 13/10/2020 - Added default status
 -- =============================================
 
 CREATE PROCEDURE [dbo].[youtube_INSERT] 
@@ -36,6 +37,8 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	
+	DECLARE @status char(10) = 'complete'
+	
 	EXEC media_INSERT
 		@media_id,
 		@type,
@@ -50,7 +53,8 @@ BEGIN
 		@media_tag_id,
 		@title,
 		@description,
-		@alt
+		@alt,
+		@status
 
 	INSERT INTO 
 		youtube 
