@@ -16,6 +16,7 @@ GO
 -- V1.2 - 23/08/2020 - Added TOP 1
 -- V1.3 - 11/10/2020 - Added check for media status error
 -- V1.4 - 13/10/2020 - Return media status
+-- V1.5 - 14/10/2020 - Added ORDER BY datetime_created ASC
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -53,4 +54,6 @@ BEGIN
 		original_dir IS NOT NULL
 		AND compressed_dir IS NULL
 		AND [status] <> 'error'
+	ORDER BY
+		datetime_created ASC
 END
