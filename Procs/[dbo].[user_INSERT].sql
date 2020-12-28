@@ -52,7 +52,7 @@ BEGIN
 		@status)
 
 	DECLARE @id int = @@IDENTITY
-	EXEC media_UPDATE 
+	EXEC user_UPDATE 
 		@id,
 		@username, 
 		@email,
