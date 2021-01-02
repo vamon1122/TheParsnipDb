@@ -15,6 +15,7 @@ GO
 -- V1.1 - 27/03/2020 - Removed [vw_video].media_tag_id & added SELECT for media_tags
 -- V1.2 - 10/05/2020 - Added SELECT for media_user_pairs
 -- V1.3 - 11/10/2020 - Added media status
+-- V1.4 - 02/01/2021 - Retrieve video thumbnails
 -- =============================================
 
 CREATE PROCEDURE [dbo].[video_SELECT_WHERE_media_id] 
@@ -61,5 +62,7 @@ BEGIN
 	EXEC [dbo].[media_tag_pair_SELECT_WHERE_media_id] @media_id
 
 	EXEC [dbo].[media_user_pair_SELECT_WHERE_media_id] @media_id
+
+	EXEC [dbo].[video_thumbnail_SELECT_WHERE_media_id] @media_id
 END
 GO
