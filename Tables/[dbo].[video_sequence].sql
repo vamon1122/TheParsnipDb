@@ -38,9 +38,9 @@ ADD CONSTRAINT FK_video_sequence_media FOREIGN KEY
 (
 	media_id
 )
-REFERENCES dbo.media
+REFERENCES dbo.video
 (
-	id
+	media_id
 )
 ON UPDATE  NO ACTION
 ON DELETE  NO ACTION
@@ -51,9 +51,9 @@ ADD CONSTRAINT FK_video_sequence_original_media FOREIGN KEY
 (
 	original_media_id
 )
-REFERENCES dbo.media
+REFERENCES dbo.video
 (
-	id
+	media_id
 )
 ON UPDATE  NO ACTION
 ON DELETE  NO ACTION
