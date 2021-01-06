@@ -18,17 +18,13 @@ GO
 -- V1.4 - 30/08/2020 - Added defaults & reformatted
 -- V1.5 - 31/08/2020 - Removed default vaule for @title
 -- V1.6 - 31/08/2020 - Changed default value of @title to NULL
+-- V1.7 - 16/01/2021 - Remove thumbnail parameters from video insert
 -- =============================================
 
 CREATE PROCEDURE dbo.video_INSERT
 	@title nchar(100) = NULL,
 	@original_dir varchar(1000) = NULL,
-	@thumbnail_original_dir varchar(1000),
-	@thumbnail_compressed_dir varchar(1000),
-	@thumbnail_placeholder_dir varchar(1000),
 	@datetime_captured datetime = NULL,
-	@thumbnail_x_scale smallint,
-	@thumbnail_y_scale smallint,
 	@media_tag_id int = NULL,
 	@created_by_user_id int,
 	@new_media_id char(8) = NULL,
@@ -54,11 +50,6 @@ BEGIN
 		@type = 'video',
 		@datetime_captured = @datetime_captured,
 		@datetime_created = @now,
-		@x_scale = @thumbnail_x_scale,
-		@y_scale = @thumbnail_y_scale,
-		@original_dir = @thumbnail_original_dir,
-		@compressed_dir = @thumbnail_compressed_dir,
-		@placeholder_dir = @thumbnail_placeholder_dir,
 		@created_by_user_id = @created_by_user_id,
 		@media_tag_id = @media_tag_id,
 		@title = @title,
