@@ -23,11 +23,11 @@ CREATE PROCEDURE [dbo].[media_INSERT]
 	@type char(10), 
 	@datetime_captured datetime = GETDATE,
 	@datetime_created datetime = GETDATE,
-	@x_scale smallint,
-	@y_scale smallint,
-	@original_dir char(1024),
-	@compressed_dir char(1024),
-	@placeholder_dir char(1024), 
+	@x_scale smallint = NULL,
+	@y_scale smallint = NULL,
+	@original_dir char(1024) = NULL,
+	@compressed_dir char(1024) = NULL,
+	@placeholder_dir char(1024) = NULL, 
 	@created_by_user_id int,
 	@media_tag_id char(8) = NULL,
 	@title nchar(100) = NULL,
@@ -38,54 +38,56 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	INSERT INTO 
-		media 
-		(
-			id,
-			[type],
-			placeholder_dir, 
-			compressed_dir, 
-			original_dir, 
-			x_scale, 
-			y_scale, 
-			datetime_created, 
-			datetime_captured, 
-			created_by_user_id
-		) 
-	VALUES
-		(
-			@id,
-			@type,
-			@placeholder_dir, 
-			@compressed_dir, 
-			@original_dir, 
+	IF @type = 'video' OR (@x_scale IS NOT NULL AND @y_scale IS NOT NULL AND @original_dir IS NOT NULL AND @compressed_dir IS NOT NULL AND @placeholder_dir IS NOT NULL) BEGIN
+		INSERT INTO 
+			media 
+			(
+				id,
+				[type],
+				placeholder_dir, 
+				compressed_dir, 
+				original_dir, 
+				x_scale, 
+				y_scale, 
+				datetime_created, 
+				datetime_captured, 
+				created_by_user_id
+			) 
+		VALUES
+			(
+				@id,
+				@type,
+				@placeholder_dir, 
+				@compressed_dir, 
+				@original_dir, 
+				@x_scale, 
+				@y_scale, 
+				@datetime_created, 
+				@datetime_captured, 
+				@created_by_user_id
+			)
+		
+		DECLARE @media_tag_created_by_user_id int
+		IF @media_tag_id IS NOT NULL BEGIN
+			SET @media_tag_created_by_user_id = @created_by_user_id
+		END ELSE BEGIN
+			SET @media_tag_created_by_user_id = NULL
+		END
+
+		EXEC media_UPDATE 
+			@id, 
+			@title, 
+			@description, 
+			@alt, 
+			@datetime_captured, 
+			@media_tag_id, 
+			@media_tag_created_by_user_id, 
 			@x_scale, 
 			@y_scale, 
-			@datetime_created, 
-			@datetime_captured, 
-			@created_by_user_id
-		)
-		
-	DECLARE @media_tag_created_by_user_id int
-	IF @media_tag_id IS NOT NULL BEGIN
-		SET @media_tag_created_by_user_id = @created_by_user_id
-	END ELSE BEGIN
-		SET @media_tag_created_by_user_id = NULL
+			@placeholder_dir, 
+			@compressed_dir, 
+			@original_dir,
+			@status
 	END
-
-	EXEC media_UPDATE 
-		@id, 
-		@title, 
-		@description, 
-		@alt, 
-		@datetime_captured, 
-		@media_tag_id, 
-		@media_tag_created_by_user_id, 
-		@x_scale, 
-		@y_scale, 
-		@placeholder_dir, 
-		@compressed_dir, 
-		@original_dir,
-		@status
 END
 GO
