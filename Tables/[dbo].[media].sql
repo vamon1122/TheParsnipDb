@@ -16,11 +16,11 @@ CREATE TABLE dbo.media
 	title nchar(100) NULL,
 	[description] nchar(1000) NULL,
 	alt char(1024) NULL,
-	x_scale smallint NOT NULL,
-	y_scale smallint NOT NULL,
-	placeholder_dir char(1024) NOT NULL,
-	compressed_dir char(1024) NOT NULL,
-	original_dir char(1024) NOT NULL,
+	x_scale smallint NULL,
+	y_scale smallint NULL,
+	placeholder_dir char(1024) NULL,
+	compressed_dir char(1024) NULL,
+	original_dir char(1024) NULL,
 	CONSTRAINT PK_media_id PRIMARY KEY CLUSTERED
 	(
 		id ASC
