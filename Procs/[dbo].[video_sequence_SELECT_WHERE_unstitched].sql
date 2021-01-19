@@ -15,6 +15,7 @@ GO
 -- V1.1 - 23/08/2020 - Return results for new parent media & stop filtering by media_id (not a parameter)
 -- V1.2 - 23/08/2020 - Fix results
 -- V1.3 - 29/08/2020 - Changed scales to smallint
+-- V1.4 - 19/01/2021 - Return media status
 -- =============================================
 
 CREATE PROCEDURE dbo.video_sequence_SELECT_WHERE_unstitched
@@ -40,6 +41,7 @@ BEGIN
 	DECLARE @created_by_user_id int
 	DECLARE @datetime_deleted datetime
 	DECLARE @datetime_user_deleted datetime
+	DECLARE @status char(10)
 	
 	SELECT TOP 1
 		@media_id = vw_video.media_id,
@@ -59,7 +61,8 @@ BEGIN
 		@thumbnail_placeholder_dir = vw_video.thumbnail_placeholder_dir,
 		@created_by_user_id = vw_video.created_by_user_id,
 		@datetime_deleted = vw_video.datetime_deleted,
-		@datetime_user_deleted = vw_video.datetime_user_deleted
+		@datetime_user_deleted = vw_video.datetime_user_deleted,
+		@status = vw_video.[status]
 	FROM
 		video_sequence
 		INNER JOIN vw_video ON vw_video.media_id = video_sequence.media_id
@@ -87,7 +90,12 @@ BEGIN
 			@thumbnail_placeholder_dir,
 			@created_by_user_id,
 			@datetime_deleted,
-			@datetime_user_deleted
+			@datetime_user_deleted,
+			NULL,
+			NULL,
+			NULL,
+			NULL,
+			@status
 		
 		EXEC dbo.video_sequence_original_media_SELECT_WHERE_media_id
 			@media_id
