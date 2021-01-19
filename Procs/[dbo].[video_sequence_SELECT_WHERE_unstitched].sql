@@ -16,6 +16,7 @@ GO
 -- V1.2 - 23/08/2020 - Fix results
 -- V1.3 - 29/08/2020 - Changed scales to smallint
 -- V1.4 - 19/01/2021 - Return media status
+-- V1.5 - 20/01/2021 - Stop returning media with error status
 -- =============================================
 
 CREATE PROCEDURE dbo.video_sequence_SELECT_WHERE_unstitched
@@ -68,6 +69,7 @@ BEGIN
 		INNER JOIN vw_video ON vw_video.media_id = video_sequence.media_id
 	WHERE
 		vw_video.compressed_dir IS NULL
+		AND vw_video.[status] != 'error'
 	ORDER BY 
 		vw_video.datetime_created ASC
 	
