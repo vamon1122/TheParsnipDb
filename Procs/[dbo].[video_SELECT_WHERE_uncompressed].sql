@@ -17,6 +17,7 @@ GO
 -- V1.3 - 11/10/2020 - Added check for media status error
 -- V1.4 - 13/10/2020 - Return media status
 -- V1.5 - 14/10/2020 - Added ORDER BY datetime_created ASC
+-- V1.6 - 02/02/2021 - Also return rows for 'reprocess' status
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -51,9 +52,12 @@ BEGIN
 	FROM
 		vw_video
 	WHERE
-		original_dir IS NOT NULL
-		AND compressed_dir IS NULL
-		AND [status] <> 'error'
+		(
+			original_dir IS NOT NULL
+			AND compressed_dir IS NULL
+			AND [status] <> 'error'
+		)
+		OR [status] = 'reprocess'
 	ORDER BY
 		datetime_created ASC
 END
