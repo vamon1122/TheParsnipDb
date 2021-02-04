@@ -10,6 +10,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 02/01/2021 - Initial create
+-- V1.1 - 04/02/2021 - Replace thumbnail if deleted
 -- =============================================
 CREATE PROCEDURE [dbo].[video_thumbnail_INSERT] 
 	@media_id char(8),
@@ -33,7 +34,7 @@ BEGIN
 	END
 	
 	DECLARE @active int
-	IF NOT EXISTS(SELECT active FROM video_thumbnail WHERE media_id = @media_id AND active = 1) BEGIN
+	IF NOT EXISTS(SELECT active FROM video_thumbnail WHERE media_id = @media_id AND active = 1 AND datetime_deleted IS NULL) BEGIN
 		SET @active = 1
 	END ELSE IF @created_by_user_id IS NOT NULL BEGIN
 		SET @active = 1
