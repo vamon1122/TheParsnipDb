@@ -18,6 +18,7 @@ GO
 -- V1.4 - 13/10/2020 - Return media status
 -- V1.5 - 14/10/2020 - Added ORDER BY datetime_created ASC
 -- V1.6 - 02/02/2021 - Also return rows for 'reprocess' status
+-- V1.7 - 04/02/2021 - Check that not a video sequence
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -26,38 +27,39 @@ BEGIN
 	SET NOCOUNT ON
 
 	SELECT TOP 1
-		media_id,
-		title,
-		[description],
-		alt,
-		datetime_captured,
-		datetime_created,
-		x_scale,
-		y_scale,
-		original_dir,
-		compressed_dir,
-		thumbnail_x_scale,
-		thumbnail_y_scale,
-		thumbnail_original_dir,
-		thumbnail_compressed_dir,
-		thumbnail_placeholder_dir,
-		created_by_user_id,
-		datetime_deleted,
-		datetime_user_deleted,
+		vw_video.media_id,
+		vw_video.title,
+		vw_video.[description],
+		vw_video.alt,
+		vw_video.datetime_captured,
+		vw_video.datetime_created,
+		vw_video.x_scale,
+		vw_video.y_scale,
+		vw_video.original_dir,
+		vw_video.compressed_dir,
+		vw_video.thumbnail_x_scale,
+		vw_video.thumbnail_y_scale,
+		vw_video.thumbnail_original_dir,
+		vw_video.thumbnail_compressed_dir,
+		vw_video.thumbnail_placeholder_dir,
+		vw_video.created_by_user_id,
+		vw_video.datetime_deleted,
+		vw_video.datetime_user_deleted,
 		null,
 		null,
 		null,
 		null,
-		[status]
+		vw_video.[status]
 	FROM
 		vw_video
+		LEFT JOIN video_sequence ON video_sequence.media_id = vw_video.media_id
 	WHERE
 		(
-			original_dir IS NOT NULL
-			AND compressed_dir IS NULL
-			AND [status] <> 'error'
+			vw_video.original_dir IS NOT NULL
+			AND vw_video.compressed_dir IS NULL
+			AND vw_video.[status] <> 'error'
 		)
-		OR [status] = 'reprocess'
+		OR vw_video.[status] = 'reprocess' AND video_sequence.media_id IS NULL
 	ORDER BY
-		datetime_created ASC
+		vw_video.datetime_created ASC
 END
