@@ -1,0 +1,12 @@
+CREATE FULLTEXT CATALOG [user_catalog] WITH ACCENT_SENSITIVITY = ON
+GO
+CREATE FULLTEXT INDEX ON [dbo].[user] KEY INDEX [PK_user_id_ASC] ON ([user_catalog]) WITH (CHANGE_TRACKING AUTO)
+GO
+ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([forename])
+GO
+ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([surname])
+GO
+ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([username])
+GO
+ALTER FULLTEXT INDEX ON [dbo].[user] ENABLE
+GO
