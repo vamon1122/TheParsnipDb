@@ -21,6 +21,7 @@ CREATE TABLE dbo.media
 	placeholder_dir char(1024) NULL,
 	compressed_dir char(1024) NULL,
 	original_dir char(1024) NULL,
+	search_terms char(1000) NULL,
 	CONSTRAINT PK_media_id PRIMARY KEY CLUSTERED
 	(
 		id ASC

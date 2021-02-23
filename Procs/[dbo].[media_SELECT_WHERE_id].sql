@@ -13,6 +13,7 @@ GO
 -- V1.2 - 27/03/2020 - Added SELECT for media_tags
 -- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
 -- V1.4 - 16/07/2020 - Added view count
+-- V1.5 - 23/02/2021 - Add search terms
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_id] 
 	@id char(8), 
@@ -38,7 +39,9 @@ BEGIN
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_vw_media_share_created,
-		[vw_media].[type]
+		[vw_media].[type],
+		NULL,
+		[vw_media].[search_terms]
 	FROM
 		vw_media
 		LEFT JOIN media_share 

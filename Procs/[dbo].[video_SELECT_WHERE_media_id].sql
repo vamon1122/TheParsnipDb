@@ -16,6 +16,7 @@ GO
 -- V1.2 - 10/05/2020 - Added SELECT for media_user_pairs
 -- V1.3 - 11/10/2020 - Added media status
 -- V1.4 - 02/01/2021 - Retrieve video thumbnails
+-- V1.5 - 23/02/2021 - Added search terms
 -- =============================================
 
 CREATE PROCEDURE [dbo].[video_SELECT_WHERE_media_id] 
@@ -48,7 +49,8 @@ BEGIN
 		[media_share].id,
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_vw_media_share_created,
-		[vw_video].[status]
+		[vw_video].[status],
+		[vw_video].[search_terms]
 	FROM 
 		vw_video 
 		LEFT JOIN [media_share] 

@@ -9,6 +9,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 22/02/2021 - Initial create
+-- V1.1 - 23/02/2021 - Add search terms
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SEARCH_WHERE_text] 
 	@text nchar(100), 
@@ -42,7 +43,8 @@ BEGIN
 		[media_share].created_by_user_id,
 		[media_share].datetime_created AS datetime_media_share_created,
 		[vw_media].[type],
-		[vw_media].[status]
+		[vw_media].[status],
+		[vw_media].[search_terms]
 	FROM
 		[vw_media]
 		INNER JOIN [dbo].[media] ON [media].[id] = [vw_media].[id]
@@ -52,7 +54,8 @@ BEGIN
 	WHERE
 		[vw_media].datetime_deleted IS NULL	  
 		AND [vw_media].[status] = 'complete'
-		AND FREETEXT(media.[title], @text)
+		AND (FREETEXT(media.[title], @text)
+		OR FREETEXT(media.[search_terms], @text))
 
 	SELECT 
 		media_tag.[id]

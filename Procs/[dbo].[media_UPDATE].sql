@@ -18,6 +18,7 @@ GO
 -- V1.4 - 29/08/2020 - Changed scales to smallint
 -- V1.5 - 10/10/2020 - Added status
 -- V1.6 - 13/10/2020 - Added coalesce for status
+-- V1.7 - 23/02/2021 - Add search terms
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_UPDATE] 
@@ -33,7 +34,8 @@ CREATE PROCEDURE [dbo].[media_UPDATE]
 	@placeholder_dir char(1024) = NULL,
 	@compressed_dir char(1024) = NULL,
 	@original_dir char(1024) = NULL,
-	@status char(10) = NULL
+	@status char(10) = NULL,
+	@search_terms char(1000) = NULL
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -54,7 +56,8 @@ BEGIN
 		y_scale = COALESCE(@y_scale, y_scale),
 		placeholder_dir = COALESCE(@placeholder_dir, placeholder_dir),
 		compressed_dir = COALESCE(@compressed_dir, compressed_dir),
-		[status] = COALESCE(@status, status)
+		[status] = COALESCE(@status, status),
+		search_terms = @search_terms
 	WHERE 
 		id = @id;
 END

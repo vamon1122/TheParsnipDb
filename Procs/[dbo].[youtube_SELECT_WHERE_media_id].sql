@@ -13,6 +13,7 @@ GO
 -- V1.1 - 17/03/2020 - Added X & Y scale
 -- V1.2 - 27/03/2020 - Removed [vw_youtube].media_tag_id & added SELECT for media_tags
 -- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
+-- V1.4 - 23/02/2020 - Added search terms
 -- =============================================
 CREATE PROCEDURE [dbo].[youtube_SELECT_WHERE_media_id] 
 	@media_id char(8), 
@@ -40,7 +41,8 @@ BEGIN
 		[vw_youtube].original_dir,
 		[vw_youtube].alt,
 		[vw_youtube].x_scale,
-		[vw_youtube].y_scale
+		[vw_youtube].y_scale,
+		[vw_youtube].search_terms
 	FROM 
 		vw_youtube 
         LEFT JOIN media_share 
