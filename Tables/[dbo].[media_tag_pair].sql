@@ -1,4 +1,3 @@
-/****** Object:  Table [dbo].[media_tag_pair]    Script Date: 19/03/2020 19:55:57 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -32,4 +31,10 @@ ALTER TABLE [dbo].[media_tag_pair]  WITH CHECK ADD  CONSTRAINT [FK_media_tag_pai
 REFERENCES [dbo].[media_tag] ([id])
 GO
 ALTER TABLE [dbo].[media_tag_pair] CHECK CONSTRAINT [FK_media_tag_pair_media_tag]
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex_media_tag_pair_media_tag_id] ON [dbo].[media_tag_pair]
+(
+	[media_tag_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+
 GO

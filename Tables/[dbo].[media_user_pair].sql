@@ -42,4 +42,10 @@ GO
 ALTER TABLE [dbo].[media_user_pair] CHECK CONSTRAINT [FK_media_user_pair_user]
 GO
 
+CREATE NONCLUSTERED INDEX [NonClusteredIndex_media_user_pair_user_id] ON [dbo].[media_user_pair]
+(
+	[user_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+
+GO
 
