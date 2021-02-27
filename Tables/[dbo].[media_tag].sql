@@ -10,6 +10,7 @@ CREATE TABLE [dbo].[media_tag](
 	[datetime_created] [datetime] NOT NULL,
 	[name] [nchar](100) NOT NULL,
 	[description] [nchar](1000) NULL,
+	[search_terms] char(1000) NULL,
  CONSTRAINT [PK_media_tag_id] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

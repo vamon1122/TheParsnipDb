@@ -11,6 +11,7 @@ GO
 -- V1.0 - 22/02/2021 - Initial create
 -- V1.1 - 23/02/2021 - Add search terms
 -- V1.2 - 24/02/2021 - Return media for tags and users found
+-- V1.3 - 27/02/2021 - Added search terms for media tags and users
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SEARCH_WHERE_text] 
 	@text nchar(100), 
@@ -83,7 +84,11 @@ BEGIN
 	WHERE 
 		[user].datetime_deleted IS NULL
 		AND media_tag.datetime_deleted IS NULL
-		AND FREETEXT(media_tag.[name], @text)
+		AND 
+		(
+			FREETEXT(media_tag.[name], @text)
+			OR FREETEXT(media_tag.[search_terms], @text)
+		)
 	ORDER BY
 		[name]
 
@@ -115,7 +120,7 @@ BEGIN
 		[media_share].datetime_created AS datetime_media_share_created,
 		[vw_media].[type],
 		[vw_media].[status],
-		[media_tag].[name] search_terms
+		CONCAT([media_tag].[name], ' ', [media_tag].search_terms) search_terms
 	FROM
 		media_tag_pair
 		INNER JOIN media_tag ON media_tag.id = media_tag_pair.media_tag_id
@@ -124,7 +129,10 @@ BEGIN
 			media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
 	WHERE 
-		media_tag_pair.media_tag_id IN (SELECT id FROM @media_tag_table_var)
+		media_tag_pair.datetime_deleted IS NULL
+		AND vw_media.datetime_deleted IS NULL
+		AND [vw_media].[status] = 'complete'
+		AND media_tag_pair.media_tag_id IN (SELECT id FROM @media_tag_table_var)
 	  
 	DECLARE @user_table_var table 
    ( 
@@ -183,6 +191,7 @@ BEGIN
 			FREETEXT([user].[forename], @text)
 			OR FREETEXT([user].[surname], @text)
 			OR FREETEXT([user].[username], @text)
+			OR FREETEXT([user].[search_terms], @text)
 		)
 
 		SELECT
@@ -229,7 +238,7 @@ BEGIN
 		[media_share].datetime_created AS datetime_media_share_created,
 		[vw_media].[type],
 		[vw_media].[status],
-		CONCAT(RTRIM([user].forename), ' ', RTRIM([user].surname)) search_terms
+		CONCAT(RTRIM([user].forename), ' ', RTRIM([user].surname), ' ', RTRIM([user].username), ' ', RTRIM([user].search_terms)) search_terms
 	FROM
 		media_user_pair
 		INNER JOIN [user] ON [user].id = media_user_pair.[user_id]
@@ -238,6 +247,9 @@ BEGIN
 			media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
 	WHERE 
-		media_user_pair.[user_id] IN (SELECT id FROM @user_table_var)
+		media_user_pair.datetime_deleted IS NULL
+		AND vw_media.datetime_deleted IS NULL
+		AND [vw_media].[status] = 'complete'
+		AND media_user_pair.[user_id] IN (SELECT id FROM @user_table_var)
 END
 GO

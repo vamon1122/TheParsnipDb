@@ -1,4 +1,3 @@
-/****** Object:  Table [dbo].[user]    Script Date: 29/03/2020 12:49:35 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -25,6 +24,7 @@ CREATE TABLE [dbo].[user](
 	[mobile_phone] [char](32) NULL,
 	[home_phone] [char](32) NULL,
 	[work_phone] [char](32) NULL,
+	[search_terms] char(1000) NULL,
  CONSTRAINT [PK_user_id_ASC] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

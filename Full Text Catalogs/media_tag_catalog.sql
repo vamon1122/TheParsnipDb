@@ -4,5 +4,7 @@ CREATE FULLTEXT INDEX ON [dbo].[media_tag] KEY INDEX [PK_media_tag_id] ON ([medi
 GO
 ALTER FULLTEXT INDEX ON [dbo].[media_tag] ADD ([name])
 GO
+ALTER FULLTEXT INDEX ON [dbo].[media_tag] ADD ([search_terms])
+GO
 ALTER FULLTEXT INDEX ON [dbo].[media_tag] ENABLE
 GO

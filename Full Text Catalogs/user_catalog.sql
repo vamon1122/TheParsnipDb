@@ -8,5 +8,7 @@ ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([surname])
 GO
 ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([username])
 GO
+ALTER FULLTEXT INDEX ON [dbo].[user] ADD ([search_terms])
+GO
 ALTER FULLTEXT INDEX ON [dbo].[user] ENABLE
 GO
