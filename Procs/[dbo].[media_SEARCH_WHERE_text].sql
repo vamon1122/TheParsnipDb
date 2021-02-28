@@ -12,6 +12,7 @@ GO
 -- V1.1 - 23/02/2021 - Add search terms
 -- V1.2 - 24/02/2021 - Return media for tags and users found
 -- V1.3 - 27/02/2021 - Added search terms for media tags and users
+-- V1.4 - 28/02/2020 - Stop returning media, which was uploaded by a deleted user, in search results
 -- =============================================
 CREATE PROCEDURE [media_SEARCH_WHERE_text] 
 	@text nchar(100), 
@@ -52,11 +53,13 @@ BEGIN
 		media.[search_terms]
 	FROM
 		media 
+		INNER JOIN [user] media_created_by_user ON media_created_by_user.id = media.created_by_user_id
 		LEFT JOIN media_share
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = media.id
 	WHERE
-		media.datetime_deleted IS NULL	  
+		media.datetime_deleted IS NULL	
+		AND media_created_by_user.datetime_deleted IS NULL
 		AND media.[status] = 'complete'
 		AND (FREETEXT(media.[title], @text)
 		OR FREETEXT(media.[search_terms], @text))
@@ -123,12 +126,14 @@ BEGIN
 		media_tag_pair
 		INNER JOIN media_tag ON media_tag.id = media_tag_pair.media_tag_id
 		INNER JOIN media ON media.id = media_tag_pair.media_id
+		INNER JOIN [user] media_created_by_user ON media_created_by_user.id = media.created_by_user_id
 		LEFT JOIN media_share ON 
 			media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = media.id
 	WHERE 
 		media_tag_pair.datetime_deleted IS NULL
 		AND media.datetime_deleted IS NULL
+		AND media_created_by_user.datetime_deleted IS NULL
 		AND media.[status] = 'complete'
 		AND media_tag_pair.media_tag_id IN (SELECT id FROM @media_tag_table_var)
 	  
@@ -241,12 +246,14 @@ BEGIN
 		[media_user_pair]
 		INNER JOIN [user] ON [user].id = media_user_pair.[user_id]
 		INNER JOIN media ON media.id = media_user_pair.media_id
+		INNER JOIN [user] media_created_by_user ON media_created_by_user.id = media.created_by_user_id
 		LEFT JOIN media_share ON 
 			media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = media.id
 	WHERE 
 		media_user_pair.datetime_deleted IS NULL
 		AND media.datetime_deleted IS NULL
+		AND media_created_by_user.datetime_deleted IS NULL
 		AND media.[status] = 'complete'
 		AND media_user_pair.[user_id] IN (SELECT id FROM @user_table_var)
 END
