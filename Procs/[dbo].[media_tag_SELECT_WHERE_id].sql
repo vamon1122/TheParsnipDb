@@ -11,6 +11,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 08/05/2020 - Initial create 
+-- V1.1 - 10/03/2021 - Added check for deleted media tag
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_tag_SELECT_WHERE_id] 
@@ -29,7 +30,8 @@ BEGIN
 		media_tag 
 		INNER JOIN [user] ON [user].id = media_tag.created_by_user_id 
 	WHERE 
-		[user].datetime_deleted IS NULL
+		media_tag.datetime_deleted IS NULL
+		AND [user].datetime_deleted IS NULL
 		AND media_tag.id = @id
 END
 GO
