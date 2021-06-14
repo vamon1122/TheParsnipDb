@@ -1,13 +1,13 @@
-SELECT image.title AS media_title, 
+SELECT vw_image.title AS media_title, 
 uploaded_by.forename AS uploaded_by, 
 shared_by.forename AS shared_by, 
-access_token.times_used,
-image.src AS media_directory,
-access_token.media_id
+vw_media_share.times_used,
+vw_image.original_dir AS media_directory,
+vw_media_share.media_id
 
-FROM access_token 
-INNER JOIN image ON access_token.media_id = image.image_id 
-INNER JOIN [user] AS uploaded_by ON image.created_by_user_id = uploaded_by.user_id 
-INNER JOIN [user] AS shared_by ON access_token.created_by_user_id = shared_by.user_id 
+FROM vw_media_share 
+INNER JOIN vw_image ON vw_media_share.media_id = vw_image.media_id 
+INNER JOIN [user] AS uploaded_by ON vw_image.created_by_user_id = uploaded_by.id 
+INNER JOIN [user] AS shared_by ON vw_media_share.created_by_user_id = shared_by.id 
 
 ORDER BY times_used DESC;
