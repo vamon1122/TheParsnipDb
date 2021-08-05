@@ -15,6 +15,7 @@ GO
 -- V1.2 - 27/03/2020 - Removed [vw_video].media_tag_id (implemented multiple media tags)
 -- V1.3 - 05/05/2020 - Removed is_album (removed from table)
 -- V1.4 - 11/10/2020 - Added media status
+-- V1.5 - 05/08/2021 - Return media for logged in user regardless of status
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_tag_id] 
@@ -100,7 +101,7 @@ BEGIN
 			AND media_share.media_id = [vw_media].id
 	WHERE
 		[vw_media].datetime_deleted IS NULL	  
-		AND [vw_media].[status] = 'complete'
+		AND ([vw_media].[status] = 'complete' OR [vw_media].created_by_user_id = @logged_in_user_id)
 		AND [vw_media].id IN 
 			(SELECT 
 				media_id 

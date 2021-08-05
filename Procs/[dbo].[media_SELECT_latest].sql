@@ -10,6 +10,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 22/07/2021 - Initial create
+-- V1.1 - 05/08/2021 - Return media for logged in user regardless of status
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_SELECT_latest] 
@@ -52,7 +53,7 @@ BEGIN
 	WHERE
 		[vw_media].datetime_created > @three_months_ago
 		AND [vw_media].datetime_deleted IS NULL	  
-		AND [vw_media].[status] = 'complete'
+		AND ([vw_media].[status] = 'complete' OR [vw_media].created_by_user_id = @logged_in_user_id)
 	ORDER BY
 		[vw_media].datetime_created DESC
 END

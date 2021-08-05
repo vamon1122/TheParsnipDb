@@ -14,6 +14,7 @@ GO
 -- V1.3 - 27/02/2021 - Added search terms for media tags and users
 -- V1.4 - 28/02/2020 - Stop returning media, which was uploaded by a deleted user, in search results
 -- V1.5 - 01/03/2020 - Optimise views for search
+-- V1.6 - 06/08/2021 - Return media for logged in user regardless of status
 -- =============================================
 CREATE PROCEDURE [dbo].[media_SEARCH_WHERE_text] 
 	@text nchar(100), 
@@ -215,7 +216,7 @@ BEGIN
 	WHERE
 		vw_media.datetime_deleted IS NULL	
 		AND vw_media.created_by_user_datetime_deleted IS NULL
-		AND vw_media.[status] = 'complete'
+		AND (vw_media.[status] = 'complete' OR vw_media.created_by_user_id = @logged_in_user_id)
 		AND (FREETEXT(vw_media.title, @text)
 		OR FREETEXT(vw_media.search_terms, @text))
 	
