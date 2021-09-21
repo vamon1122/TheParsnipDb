@@ -16,13 +16,14 @@ GO
 -- V1.2 - 29/05/2020 - Added default value for
 -- V1.3 - 29/08/2020 - Changed scales to smallint
 -- V1.4 - 11/10/2020 - Added media type
+-- V1.5 - 23/09/2021 - Allowed nulls & added default @datetime_captured & @datetime_created
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_INSERT] 
 	@id char(8), 
 	@type char(10), 
-	@datetime_captured datetime = GETDATE,
-	@datetime_created datetime = GETDATE,
+	@datetime_captured datetime = NULL,
+	@datetime_created datetime = NULL,
 	@x_scale smallint = NULL,
 	@y_scale smallint = NULL,
 	@original_dir char(1024) = NULL,
@@ -38,7 +39,15 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF @type = 'video' OR (@x_scale IS NOT NULL AND @y_scale IS NOT NULL AND @original_dir IS NOT NULL AND @compressed_dir IS NOT NULL AND @placeholder_dir IS NOT NULL) BEGIN
+	IF @datetime_created IS NULL BEGIN
+		SET @datetime_created = GETDATE()
+	END
+
+	IF @datetime_captured IS NULL BEGIN
+		SET @datetime_captured = @datetime_created
+	END
+
+	IF @type = 'video' OR @type = 'youtube' OR (@x_scale IS NOT NULL AND @y_scale IS NOT NULL AND @original_dir IS NOT NULL AND @compressed_dir IS NOT NULL AND @placeholder_dir IS NOT NULL) BEGIN
 		INSERT INTO 
 			media 
 			(

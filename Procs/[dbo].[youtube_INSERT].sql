@@ -15,46 +15,26 @@ GO
 -- V1.1 - 03/06/2020 - media_tag_id is now an optional parameter
 -- V1.3 - 29/08/2020 - Changed scales to smallint
 -- V1.4 - 13/10/2020 - Added default status
+-- V1.5 - 23/09/2021 - Remove redundant parameters and change default status to raw
 -- =============================================
 
 CREATE PROCEDURE [dbo].[youtube_INSERT] 
 	@media_id char(8), 
 	@data_id char(11), 
-	@type char(10), 
-	@datetime_captured datetime = GETDATE,
-	@datetime_created datetime = GETDATE,
-	@x_scale smallint,
-	@y_scale smallint,
-	@original_dir char(1024),
-	@compressed_dir char(1024),
-	@placeholder_dir char(1024), 
+	@datetime_created datetime = NULL,
 	@created_by_user_id int,
-	@media_tag_id char(8) = NULL,
-	@title nchar(100) = NULL,
-	@description nchar(1000) = NULL,
-	@alt nchar(1024) = NULL
+	@media_tag_id char(8) = NULL
 AS
 BEGIN
 	SET NOCOUNT ON
 	
-	DECLARE @status char(10) = 'complete'
-	
 	EXEC media_INSERT
-		@media_id,
-		@type,
-		@datetime_captured,
-		@datetime_created,
-		@x_scale,
-		@y_scale,
-		@original_dir,
-		@compressed_dir,
-		@placeholder_dir, 
-		@created_by_user_id,
-		@media_tag_id,
-		@title,
-		@description,
-		@alt,
-		@status
+		@id = @media_id,
+		@type = 'youtube',
+		@status = 'raw',
+		@datetime_created = @datetime_created,
+		@created_by_user_id = @created_by_user_id,
+		@media_tag_id = @media_tag_id
 
 	INSERT INTO 
 		youtube 

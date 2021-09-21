@@ -14,6 +14,7 @@ GO
 -- V1.0 - 30/08/2020 - Initial Create
 -- V1.1 - 10/10/2020 - Added status
 -- V1.2 - 13/10/2020 - Removed metadata
+-- V1.3 - 22/09/2021 - Insert if does not exist
 -- =============================================
 
 CREATE PROCEDURE dbo.video_UPDATE
@@ -36,6 +37,22 @@ BEGIN
 		duration = @duration
 	WHERE 
 		media_id = @media_id
+
+	IF @@ROWCOUNT = 0 AND (@compressed_dir IS NOT NULL OR @x_scale IS NOT NULL OR @y_scale IS NOT NULL OR @duration IS NOT NULL) BEGIN
+		INSERT INTO
+			video
+		(media_id,
+		compressed_dir,
+		x_scale,
+		y_scale,
+		duration)
+		VALUES(
+		@media_id,
+			@compressed_dir,
+			@x_scale,
+			@y_scale,
+			@duration)
+	END
 		
 	UPDATE 
 		media 
