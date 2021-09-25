@@ -19,6 +19,7 @@ GO
 -- V1.5 - 14/10/2020 - Added ORDER BY datetime_created ASC
 -- V1.6 - 02/02/2021 - Also return rows for 'reprocess' status
 -- V1.7 - 04/02/2021 - Check that not a video sequence
+-- V1.8 - 25/09/2021 - Add check to ensure only videos of type 'video' are returned
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -54,12 +55,15 @@ BEGIN
 		vw_video
 		LEFT JOIN video_sequence ON video_sequence.media_id = vw_video.media_id
 	WHERE
+		vw_video.[type] = 'video' AND 
 		(
-			vw_video.original_dir IS NOT NULL
-			AND vw_video.compressed_dir IS NULL
-			AND vw_video.[status] <> 'error'
+			(
+				vw_video.original_dir IS NOT NULL
+				AND vw_video.compressed_dir IS NULL
+				AND vw_video.[status] <> 'error'
+			)
+			OR vw_video.[status] = 'reprocess' AND video_sequence.media_id IS NULL
 		)
-		OR vw_video.[status] = 'reprocess' AND video_sequence.media_id IS NULL
 	ORDER BY
 		vw_video.datetime_created ASC
 END
