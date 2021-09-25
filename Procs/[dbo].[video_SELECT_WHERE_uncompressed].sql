@@ -20,6 +20,7 @@ GO
 -- V1.6 - 02/02/2021 - Also return rows for 'reprocess' status
 -- V1.7 - 04/02/2021 - Check that not a video sequence
 -- V1.8 - 25/09/2021 - Add check to ensure only videos of type 'video' are returned
+-- v1.9 - 25/09/2021 - Prioritise media with status of 'raw' over 'reprocess'
 -- =============================================
 
 CREATE PROCEDURE dbo.video_SELECT_WHERE_uncompressed
@@ -65,5 +66,6 @@ BEGIN
 			OR vw_video.[status] = 'reprocess' AND video_sequence.media_id IS NULL
 		)
 	ORDER BY
+		(CASE WHEN vw_video.[status] = 'raw' THEN 1 ELSE 2 END),
 		vw_video.datetime_created ASC
 END

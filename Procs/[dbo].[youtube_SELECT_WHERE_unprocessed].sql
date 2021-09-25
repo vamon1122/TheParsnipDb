@@ -11,6 +11,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 20/09/2021 - Initial create
+-- v1.1 - 25/09/2021 - Prioritise media with status of 'raw' over 'reprocess'
 -- =============================================
 
 CREATE PROCEDURE dbo.youtube_SELECT_WHERE_unprocessed
@@ -45,5 +46,6 @@ BEGIN
 		vw_youtube.[status] = 'raw' OR 
 		vw_youtube.[status] = 'reprocess'
 	ORDER BY
+		(CASE WHEN vw_youtube.[status] = 'raw' THEN 1 ELSE 2 END),
 		vw_youtube.datetime_created ASC
 END
