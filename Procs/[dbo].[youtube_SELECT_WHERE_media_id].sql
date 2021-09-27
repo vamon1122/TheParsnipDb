@@ -15,6 +15,7 @@ GO
 -- V1.3 - 10/05/2020 - Added SELECT for media_user_pairs
 -- V1.4 - 23/02/2020 - Added search terms
 -- V1.5 - 22/09/2021 - Added backup video data 
+-- V1.6 - 27/09/2021 - Return status & thumbnails
 -- =============================================
 CREATE PROCEDURE [dbo].[youtube_SELECT_WHERE_media_id] 
 	@media_id char(8), 
@@ -45,7 +46,8 @@ BEGIN
 		[vw_youtube].y_scale,
 		[vw_youtube].search_terms,
 		[vw_youtube].compressed_dir, 
-		[vw_youtube].original_dir
+		[vw_youtube].original_dir,
+		[vw_youtube].[status]
 	FROM 
 		vw_youtube 
         LEFT JOIN media_share 
@@ -59,5 +61,7 @@ BEGIN
 	EXEC [dbo].[media_tag_pair_SELECT_WHERE_media_id] @media_id
 
 	EXEC [dbo].[media_user_pair_SELECT_WHERE_media_id] @media_id
+
+	EXEC [dbo].[video_thumbnail_SELECT_WHERE_media_id] @media_id
 END
 GO
