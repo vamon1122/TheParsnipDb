@@ -11,6 +11,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 22/07/2021 - Initial create
 -- V1.1 - 05/08/2021 - Return media for logged in user regardless of status
+-- V1.2 - 01/10/2021 - Ignore media status when logged in user is admin
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_SELECT_latest] 
@@ -50,10 +51,16 @@ BEGIN
 		LEFT JOIN media_share 
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
+		INNER JOIN [user] logged_in_user ON logged_in_user.id = @logged_in_user_id
 	WHERE
 		[vw_media].datetime_created > @three_months_ago
 		AND [vw_media].datetime_deleted IS NULL	  
-		AND ([vw_media].[status] = 'complete' OR [vw_media].created_by_user_id = @logged_in_user_id)
+		AND 
+		(
+			[vw_media].[status] = 'complete' OR 
+			[vw_media].created_by_user_id = @logged_in_user_id OR 
+			logged_in_user.[type] = 'admin'
+		)
 	ORDER BY
 		[vw_media].datetime_created DESC
 END

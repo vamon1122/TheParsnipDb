@@ -16,6 +16,7 @@ GO
 -- V1.3 - 05/05/2020 - Removed is_album (removed from table)
 -- V1.4 - 11/10/2020 - Added media status
 -- V1.5 - 05/08/2021 - Return media for logged in user regardless of status
+-- V1.6 - 01/10/2021 - Ignore media status when logged in user is admin
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_SELECT_WHERE_media_tag_id] 
@@ -99,9 +100,15 @@ BEGIN
 		LEFT JOIN media_share 
 			ON media_share.created_by_user_id = @logged_in_user_id 
 			AND media_share.media_id = [vw_media].id
+		INNER JOIN [user] logged_in_user ON logged_in_user.id = @logged_in_user_id
 	WHERE
 		[vw_media].datetime_deleted IS NULL	  
-		AND ([vw_media].[status] = 'complete' OR [vw_media].created_by_user_id = @logged_in_user_id)
+		AND 
+		(
+			[vw_media].[status] = 'complete' OR 
+			[vw_media].created_by_user_id = @logged_in_user_id OR 
+			logged_in_user.[type] = 'admin'
+		)
 		AND [vw_media].id IN 
 			(SELECT 
 				media_id 
