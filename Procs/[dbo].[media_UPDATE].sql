@@ -19,6 +19,7 @@ GO
 -- V1.5 - 10/10/2020 - Added status
 -- V1.6 - 13/10/2020 - Added coalesce for status
 -- V1.7 - 23/02/2021 - Add search terms
+-- V1.8 - 04/10/2021 - Added 'is_new' parameter
 -- =============================================
 
 CREATE PROCEDURE [dbo].[media_UPDATE] 
@@ -35,7 +36,8 @@ CREATE PROCEDURE [dbo].[media_UPDATE]
 	@compressed_dir char(1024) = NULL,
 	@original_dir char(1024) = NULL,
 	@status char(10) = NULL,
-	@search_terms char(1000) = NULL
+	@search_terms char(1000) = NULL,
+	@is_new bit = 0
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -48,8 +50,8 @@ BEGIN
 	UPDATE 
 		media 
 	SET 
-		title = @title, 
-		[description] = @description, 
+		title = CASE WHEN @is_new = 0 THEN @title ELSE CASE WHEN @title IS NULL THEN title ELSE @title END END,
+		[description] = CASE WHEN @is_new = 0 THEN @description ELSE CASE WHEN @description IS NULL THEN [description] ELSE @description END END, 
 		alt = @alt, 
 		datetime_captured = COALESCE(@datetime_captured, datetime_captured),
 		x_scale = COALESCE(@x_scale, x_scale),
