@@ -11,6 +11,7 @@ GO
 -- CHANGELOG
 -- V1.0 - 02/01/2021 - Initial create
 -- V1.1 - 04/02/2021 - Replace thumbnail if deleted
+-- V1.2 - 09/04/2022 - Return the display order
 -- =============================================
 CREATE PROCEDURE [dbo].[video_thumbnail_INSERT] 
 	@media_id char(8),
@@ -35,8 +36,6 @@ BEGIN
 	
 	DECLARE @active int
 	IF NOT EXISTS(SELECT active FROM video_thumbnail WHERE media_id = @media_id AND active = 1 AND datetime_deleted IS NULL) BEGIN
-		SET @active = 1
-	END ELSE IF @created_by_user_id IS NOT NULL BEGIN
 		SET @active = 1
 	END ELSE BEGIN
 		SET @active = 0
@@ -91,5 +90,7 @@ BEGIN
 			@compressed_dir,
 			@original_dir
 		)
+
+	RETURN @display_order
 END
 GO

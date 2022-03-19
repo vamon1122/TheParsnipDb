@@ -10,6 +10,7 @@ GO
 -- =============================================
 -- CHANGELOG
 -- V1.0 - 09/01/2021 - Initial create
+-- V1.1 - 30/03/2022 - Return new display order
 -- =============================================
 CREATE PROCEDURE [dbo].[video_thumbnail_UPDATE_active] 
 	@media_id char(8),
@@ -45,5 +46,7 @@ BEGIN
 	WHERE 
 		media_id = @media_id 
 		AND display_order = @display_order
+
+		RETURN @new_display_order
 END
 GO
