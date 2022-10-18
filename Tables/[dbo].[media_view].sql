@@ -8,6 +8,8 @@ CREATE TABLE [dbo].[media_view](
 	[media_id] [char](8) NOT NULL,
 	[created_by_user_id] [int] NULL,
 	[datetime_created] [datetime] NOT NULL,
+	[is_scroll] [bit] NOT NULL CONSTRAINT DF_media_view_is_scroll DEFAULT 0,
+	[view_timespan] [time](7) NULL
  CONSTRAINT [PK_media_view] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
